@@ -3,7 +3,7 @@
 
 // current maximum capacity of the vector
 int max_capacity;
-// current size of the vector, meaning how many elements hold actual values
+// current size of the vector, meaning how many elements hold actual values minus one
 int reserved_size;
 
 /*
@@ -16,9 +16,9 @@ int reserved_size;
 */
 int* CreateVector(int size, int *max, int *reserved){
     int *vector;
-    vector = (int *)malloc(size * sizeof(int)); // allocates the amount of memory required for the number of initial elements
+    vector = (int *)malloc(size  * sizeof(int)); // allocates the amount of memory required for the number of initial elements
     *max = size;
-    *reserved = size;
+    *reserved = 0;
     return vector;
 }
 
@@ -28,7 +28,7 @@ int* CreateVector(int size, int *max, int *reserved){
     @params {array} Input array to be copied to the new larger array
     @params {size} The size of the new array
     @params {max} member variable holding the max capacity of the array
-    @params {reserved} member variable holding the number of used elements
+    @params {reserved} member variable holding the number of used elements minus one
 */
 void Resize(int *array, int size, int *max, int *reserved) {
     // New Array must be larger than old
@@ -48,7 +48,36 @@ void Resize(int *array, int size, int *max, int *reserved) {
     return;
 }
 
+
+/*
+    @desc This function appends an element to the end of the array.
+            If the array can't hold any more elements, the array is resized to double it's current max capacity
+    @author Jarod Manness
+    @params {element} Element to be added to the end of the array
+    @params {array} The array to be added to
+    @params {max} The max capacity of the array
+    @params {reserved} The number of elements reserved and have data minus one
+*/
+void Append(int element, int *array, int *max, int *reserved){
+    *reserved = *reserved + 1;
+    if(*max < *reserved){
+        Resize(array, *max * 2, max, reserved);
+    }
+    array[*reserved - 1] = element;
+}
+
 void main(){
     int *createdVector = CreateVector(3, &max_capacity, &reserved_size);
+    Append(2, createdVector, &max_capacity, &reserved_size);
+    Append(3, createdVector, &max_capacity, &reserved_size);
+    Append(4, createdVector, &max_capacity, &reserved_size);
+    Append(5, createdVector, &max_capacity, &reserved_size);
+    Append(6, createdVector, &max_capacity, &reserved_size);
+    Append(7, createdVector, &max_capacity, &reserved_size);
+    Append(8, createdVector, &max_capacity, &reserved_size);
+    Append(9, createdVector, &max_capacity, &reserved_size);
+    for(int i = 0; i < reserved_size; i++){
+        printf("%d \n", createdVector[i]);
+    }
     getchar();
 }
