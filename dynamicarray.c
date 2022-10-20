@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 // current maximum capacity of the vector
 int max_capacity;
@@ -113,20 +114,45 @@ int GetSize() {
     return reserved_size;
 }
 
+/*
+    @desc This function uses a simple bubble sort algorithm to sort an array
+    @author Jarod Manness
+    @params {array} The array to use
+    @params {reserved} The number of elements reserved and have data minus one
+*/
+void Sort(int *array, int* reserved){
+    bool sorted = false;
+    while(!sorted){
+        sorted = true;
+        for(int i = 0; i < (*reserved - 1); i++){
+            if(array[i] > array[i + 1]){
+                int tmp = array[i];
+                array[i] = array[i + 1];
+                array[i + 1] = tmp;
+                sorted = false;
+            }
+        }
+    }
+}
+
 void main(){
     int *createdVector = CreateVector(3, &max_capacity, &reserved_size);
     Append(2, createdVector, &max_capacity, &reserved_size);
-    Append(3, createdVector, &max_capacity, &reserved_size);
     Append(4, createdVector, &max_capacity, &reserved_size);
-    Append(5, createdVector, &max_capacity, &reserved_size);
-    Append(6, createdVector, &max_capacity, &reserved_size);
-    Append(7, createdVector, &max_capacity, &reserved_size);
     Append(8, createdVector, &max_capacity, &reserved_size);
-    Append(9, createdVector, &max_capacity, &reserved_size);
+    Append(5, createdVector, &max_capacity, &reserved_size);
+    Append(7, createdVector, &max_capacity, &reserved_size);
+    Append(12, createdVector, &max_capacity, &reserved_size);
+    Append(3, createdVector, &max_capacity, &reserved_size);
+    Append(1, createdVector, &max_capacity, &reserved_size);
+    printf("Unsorted\n");
     for(int i = 0; i < reserved_size; i++){
         printf("%d \n", createdVector[i]);
     }
-    int popped = Pop(createdVector, &reserved_size);
-    printf("Popped: %d\n", popped);
+    Sort(createdVector, &reserved_size);
+    printf("Sorted\n");
+    for(int i = 0; i < reserved_size; i++){
+        printf("%d \n", createdVector[i]);
+    }
     getchar();
 }
