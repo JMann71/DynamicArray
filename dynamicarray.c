@@ -135,6 +135,22 @@ void Sort(int *array, int* reserved){
     }
 }
 
+/*
+    @desc this function takes in a value and returns true or false if it's an element of the array
+    @author Jarod Manness
+    @params {value} The value to search for
+    @params {array} The array to use
+    @params {reserved} The number of elements reserved and have data minus one
+*/
+bool Find(int value, int *array, int* reserved){
+    for(int i = 0; i < *reserved; i++){
+        if(array[i] == value){
+            return true;
+        }
+    }
+    return false;
+}
+
 void main(){
     int *createdVector = CreateVector(3, &max_capacity, &reserved_size);
     Append(2, createdVector, &max_capacity, &reserved_size);
@@ -153,6 +169,13 @@ void main(){
     printf("Sorted\n");
     for(int i = 0; i < reserved_size; i++){
         printf("%d \n", createdVector[i]);
+    }
+    bool found = Find(18, createdVector, &reserved_size);
+    if(found){
+        printf("Found\n");
+    }
+    else {
+        printf("Not Found\n");
     }
     getchar();
 }
