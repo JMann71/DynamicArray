@@ -83,6 +83,20 @@ void Delete(int *array, int *max, int *reserved){
     *reserved = 0;
 }
 
+
+/*
+    @desc This function gets the value in the last element of the array, returns it, then resets it to 0
+    @author Jarod Manness
+    @params {array} The array to use
+    @params {reserved} The number of elements reserved and have data minus one
+*/
+int Pop(int *array, int *reserved){
+    int ret = array[*reserved - 1];
+    array[*reserved - 1] = 0;
+    *reserved = *reserved - 1;
+    return ret;
+}
+
 void main(){
     int *createdVector = CreateVector(3, &max_capacity, &reserved_size);
     Append(2, createdVector, &max_capacity, &reserved_size);
@@ -96,5 +110,7 @@ void main(){
     for(int i = 0; i < reserved_size; i++){
         printf("%d \n", createdVector[i]);
     }
+    int popped = Pop(createdVector, &reserved_size);
+    printf("Popped: %d\n", popped);
     getchar();
 }
