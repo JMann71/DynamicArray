@@ -151,15 +151,33 @@ bool Find(int value, int *array, int* reserved){
     return false;
 }
 
+void Insert(int value, int position, int *array, int *max, int *reserved){
+    if(*reserved == *max){
+        Resize(array, *max * 2, max, reserved);
+    }
+    for(int i = position; i < *reserved; i++){
+        array[i + 1] = array[i];
+    }
+    array[position] = value;
+}
+
 void main(){
+    getchar();
     int *createdVector = CreateVector(3, &max_capacity, &reserved_size);
     Append(2, createdVector, &max_capacity, &reserved_size);
+    printf("Appended1\n");
     Append(4, createdVector, &max_capacity, &reserved_size);
+    printf("Appended2\n");
     Append(8, createdVector, &max_capacity, &reserved_size);
+    printf("Appended3\n");
     Append(5, createdVector, &max_capacity, &reserved_size);
+    printf("Appended4\n");
     Append(7, createdVector, &max_capacity, &reserved_size);
+    printf("Appended5\n");
     Append(12, createdVector, &max_capacity, &reserved_size);
+    printf("Appended6\n");
     Append(3, createdVector, &max_capacity, &reserved_size);
+    printf("Appended7\n");
     Append(1, createdVector, &max_capacity, &reserved_size);
     printf("Unsorted\n");
     for(int i = 0; i < reserved_size; i++){
@@ -176,6 +194,10 @@ void main(){
     }
     else {
         printf("Not Found\n");
+    }
+    Insert(84, 3, createdVector, &max_capacity, &reserved_size);
+    for(int i = 0; i < reserved_size; i++){
+        printf("%d \n", createdVector[i]);
     }
     getchar();
 }
