@@ -10,7 +10,6 @@ int _size;
     @desc This function creates an array of integers based on the size passed in
     @author Jarod Manness
     @params {size} number of elements to initialize
-    @return {vector} a pointer to the created array
 */
 int* CreateVector(int size){
     int* array;
@@ -72,8 +71,6 @@ void Delete(){
 /*
     @desc This function gets the value in the last element of the array, returns it, then resets it to 0
     @author Jarod Manness
-    @params {array} The array to use
-    @params {reserved} The number of elements reserved and have data minus one
 */
 int Pop(){
     int ret = createdVector[_size];
@@ -177,5 +174,6 @@ void main(){
     for(int i = 0; i < _size; i++){
         printf("%d \n", createdVector[i]);
     }
+    Delete();
     getchar();
 }
