@@ -19,6 +19,9 @@ int* CreateVector(int size, int *max, int *reserved){
     vector = (int *)malloc(size  * sizeof(int)); // allocates the amount of memory required for the number of initial elements
     *max = size;
     *reserved = 0;
+    for(int i = 0; i < *max; i++){
+        vector[i] = 0;
+    }
     return vector;
 }
 
