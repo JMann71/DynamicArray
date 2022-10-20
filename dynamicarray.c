@@ -66,6 +66,20 @@ void Append(int element, int *array, int *max, int *reserved){
     array[*reserved - 1] = element;
 }
 
+/*
+    @desc This function deletes and frees the memory associated with an input array.
+            Also resets max capacity and reserved variables to 0.
+    @author Jarod Manness
+    @params {array} The array to be deleted
+    @params {max} The max capacity of the array
+    @params {reserved} The number of elements reserved and have data minus one
+*/
+void Delete(int *array, int *max, int *reserved){
+    free(array);
+    *max = 0;
+    *reserved = 0;
+}
+
 void main(){
     int *createdVector = CreateVector(3, &max_capacity, &reserved_size);
     Append(2, createdVector, &max_capacity, &reserved_size);
