@@ -97,6 +97,22 @@ int Pop(int *array, int *reserved){
     return ret;
 }
 
+/*
+    @desc This function returns the max capacity for use outside this file
+    @author Jarod Manness
+*/
+int GetMax() {
+    return max_capacity;
+}
+
+/*
+    @desc This function returns the current size for use outside this file
+    @author Jarod Manness
+*/
+int GetSize() {
+    return reserved_size;
+}
+
 void main(){
     int *createdVector = CreateVector(3, &max_capacity, &reserved_size);
     Append(2, createdVector, &max_capacity, &reserved_size);
