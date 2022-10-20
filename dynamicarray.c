@@ -2,54 +2,43 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-// current maximum capacity of the vector
-int max_capacity;
-// current size of the vector, meaning how many elements hold actual values minus one
-int reserved_size;
+int* createdVector;
+int _max;
+int _size;
 
 /*
     @desc This function creates an array of integers based on the size passed in
     @author Jarod Manness
     @params {size} number of elements to initialize
-    @params {max} member variable holding the max capacity of the array
-    @params {reserved} member variable holding the number of used elements
     @return {vector} a pointer to the created array
 */
-int* CreateVector(int size, int *max, int *reserved){
-    int *vector;
-    vector = (int *)malloc(size  * sizeof(int)); // allocates the amount of memory required for the number of initial elements
-    *max = size;
-    *reserved = 0;
-    for(int i = 0; i < *max; i++){
-        vector[i] = 0;
+int* CreateVector(int size){
+    int* array;
+    array = (int *)malloc(size * sizeof(int));
+    for(int i = 0; i < size; i++){
+        array[i] = 0;
     }
-    return vector;
+    _max = size;
+    _size = 0;
+    return array;
 }
 
 /*
     @desc This function creates a new array of a given size, copies data from an input array into it, then reassigns the pointer to the new array
     @author Jarod Manness
-    @params {array} Input array to be copied to the new larger array
     @params {size} The size of the new array
-    @params {max} member variable holding the max capacity of the array
-    @params {reserved} member variable holding the number of used elements minus one
 */
-void Resize(int *array, int size, int *max, int *reserved) {
-    // New Array must be larger than old
-    if(size < *max) {
-        return;
+void Resize(int size){
+    int* newArray;
+    newArray = (int *)malloc(size * sizeof(int));
+    for(int i = 0; i < _size; i++){
+        newArray[i] = createdVector[i];
     }
-    int *newVector;
-    newVector = (int *)malloc(size * sizeof(int)); // Creates a new array of the requested size
-    for(int i = 0; i < *reserved; i++){
-        newVector[i] = array[i];
-    }
-    free(array);
+    free(createdVector);
 
-    array = newVector;
-    newVector = NULL;
-    *max = size;
-    return;
+    createdVector = newArray;
+    newArray = NULL;
+    _max = size;
 }
 
 
@@ -57,31 +46,26 @@ void Resize(int *array, int size, int *max, int *reserved) {
     @desc This function appends an element to the end of the array.
             If the array can't hold any more elements, the array is resized to double it's current max capacity
     @author Jarod Manness
-    @params {element} Element to be added to the end of the array
-    @params {array} The array to be added to
-    @params {max} The max capacity of the array
-    @params {reserved} The number of elements reserved and have data minus one
+    @params {value} Element to be added to the end of the array
 */
-void Append(int element, int *array, int *max, int *reserved){
-    *reserved = *reserved + 1;
-    if(*max < *reserved){
-        Resize(array, *max * 2, max, reserved);
+void Append(int value){
+    if(_size >= _max){
+        Resize(_max * 2);
     }
-    array[*reserved - 1] = element;
+    createdVector[_size] = value;
+    _size++;
 }
 
 /*
     @desc This function deletes and frees the memory associated with an input array.
             Also resets max capacity and reserved variables to 0.
     @author Jarod Manness
-    @params {array} The array to be deleted
-    @params {max} The max capacity of the array
-    @params {reserved} The number of elements reserved and have data minus one
 */
-void Delete(int *array, int *max, int *reserved){
-    free(array);
-    *max = 0;
-    *reserved = 0;
+void Delete(){
+    free(createdVector);
+    createdVector = NULL;
+    _max = 0;
+    _size = 0;
 }
 
 
@@ -91,10 +75,10 @@ void Delete(int *array, int *max, int *reserved){
     @params {array} The array to use
     @params {reserved} The number of elements reserved and have data minus one
 */
-int Pop(int *array, int *reserved){
-    int ret = array[*reserved - 1];
-    array[*reserved - 1] = 0;
-    *reserved = *reserved - 1;
+int Pop(){
+    int ret = createdVector[_size];
+    createdVector[_size - 1] = 0;
+    _size--;
     return ret;
 }
 
@@ -103,7 +87,7 @@ int Pop(int *array, int *reserved){
     @author Jarod Manness
 */
 int GetMax() {
-    return max_capacity;
+    return _max;
 }
 
 /*
@@ -111,24 +95,22 @@ int GetMax() {
     @author Jarod Manness
 */
 int GetSize() {
-    return reserved_size;
+    return _size;
 }
 
 /*
     @desc This function uses a simple bubble sort algorithm to sort an array
     @author Jarod Manness
-    @params {array} The array to use
-    @params {reserved} The number of elements reserved and have data minus one
 */
-void Sort(int *array, int* reserved){
+void Sort(){
     bool sorted = false;
     while(!sorted){
         sorted = true;
-        for(int i = 0; i < (*reserved - 1); i++){
-            if(array[i] > array[i + 1]){
-                int tmp = array[i];
-                array[i] = array[i + 1];
-                array[i + 1] = tmp;
+        for(int i = 0; i < (_size - 1); i++){
+            if(createdVector[i] > createdVector[i + 1]){
+                int tmp = createdVector[i];
+                createdVector[i] = createdVector[i + 1];
+                createdVector[i + 1] = tmp;
                 sorted = false;
             }
         }
@@ -139,64 +121,60 @@ void Sort(int *array, int* reserved){
     @desc this function takes in a value and returns true or false if it's an element of the array
     @author Jarod Manness
     @params {value} The value to search for
-    @params {array} The array to use
-    @params {reserved} The number of elements reserved and have data minus one
 */
-bool Find(int value, int *array, int* reserved){
-    for(int i = 0; i < *reserved; i++){
-        if(array[i] == value){
+bool Find(int value){
+    for(int i = 0; i < _size; i++){
+        if(createdVector[i] == value){
             return true;
         }
     }
     return false;
 }
 
-void Insert(int value, int position, int *array, int *max, int *reserved){
-    if(*reserved == *max){
-        Resize(array, *max * 2, max, reserved);
+/*
+    @desc this function inserts a given value to a given position within the array
+    @author Jarod Manness
+    @params {value} the value to be inserted
+    @params {position} the position to place the value
+*/
+void Insert(int value, int position){
+    if(_size >= (_max - 1)){
+        Resize(_max * 2);
     }
-    for(int i = position; i < *reserved; i++){
-        array[i + 1] = array[i];
+    for(int i = _size - 1; i >= position; i--){
+        createdVector[i] = createdVector[i - 1];
     }
-    array[position] = value;
+    createdVector[position] = value;
 }
 
 void main(){
-    getchar();
-    int *createdVector = CreateVector(3, &max_capacity, &reserved_size);
-    Append(2, createdVector, &max_capacity, &reserved_size);
-    printf("Appended1\n");
-    Append(4, createdVector, &max_capacity, &reserved_size);
-    printf("Appended2\n");
-    Append(8, createdVector, &max_capacity, &reserved_size);
-    printf("Appended3\n");
-    Append(5, createdVector, &max_capacity, &reserved_size);
-    printf("Appended4\n");
-    Append(7, createdVector, &max_capacity, &reserved_size);
-    printf("Appended5\n");
-    Append(12, createdVector, &max_capacity, &reserved_size);
-    printf("Appended6\n");
-    Append(3, createdVector, &max_capacity, &reserved_size);
-    printf("Appended7\n");
-    Append(1, createdVector, &max_capacity, &reserved_size);
+    createdVector = CreateVector(3);
+    Append(2);
+    Append(4);
+    Append(8);
+    Append(5);
+    Append(7);
+    Append(12);
+    Append(3);
+    Append(1);
     printf("Unsorted\n");
-    for(int i = 0; i < reserved_size; i++){
+    for(int i = 0; i < _size; i++){
         printf("%d \n", createdVector[i]);
     }
-    Sort(createdVector, &reserved_size);
+    Sort(createdVector, _size);
     printf("Sorted\n");
-    for(int i = 0; i < reserved_size; i++){
+    for(int i = 0; i < _size; i++){
         printf("%d \n", createdVector[i]);
     }
-    bool found = Find(18, createdVector, &reserved_size);
+    bool found = Find(18);
     if(found){
         printf("Found\n");
     }
     else {
         printf("Not Found\n");
     }
-    Insert(84, 3, createdVector, &max_capacity, &reserved_size);
-    for(int i = 0; i < reserved_size; i++){
+    Insert(84, 2);
+    for(int i = 0; i < _size; i++){
         printf("%d \n", createdVector[i]);
     }
     getchar();
