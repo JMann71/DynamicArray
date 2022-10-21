@@ -2,8 +2,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+// The pointer to the created array
 int* createdVector;
+// Member variable holding the maximum capacity of the array
 int _max;
+// Member variable holding the actual size of the array
 int _size;
 
 /*
@@ -12,13 +15,18 @@ int _size;
     @params {size} number of elements to initialize
 */
 int* CreateVector(int size){
+    // Create a new pointer
     int* array;
+    // Allocate memory based on the given size
     array = (int *)malloc(size * sizeof(int));
+    // Set all entries to 0
     for(int i = 0; i < size; i++){
         array[i] = 0;
     }
+    // Set member variables
     _max = size;
     _size = 0;
+    // Return the created array
     return array;
 }
 
@@ -28,14 +36,19 @@ int* CreateVector(int size){
     @params {size} The size of the new array
 */
 void Resize(int size){
+    // Create a new pointer
     int* newArray;
+    // Allocate memory based on the given size
     newArray = (int *)malloc(size * sizeof(int));
+    // Copy data from the old array into the new
     for(int i = 0; i < _size; i++){
         newArray[i] = createdVector[i];
     }
+    // Free the memory from the old array
     free(createdVector);
-
+    // Reassign the old pointer to the new array
     createdVector = newArray;
+    // Reset the new array pointer
     newArray = NULL;
     _max = size;
 }
@@ -48,10 +61,13 @@ void Resize(int size){
     @params {value} Element to be added to the end of the array
 */
 void Append(int value){
+    // Check if the number of elements is equal to or exceeds the max capacity and resize if true
     if(_size >= _max){
         Resize(_max * 2);
     }
+    // Set the last element to the given value
     createdVector[_size] = value;
+    // Increment the actual size value
     _size++;
 }
 
@@ -61,8 +77,11 @@ void Append(int value){
     @author Jarod Manness
 */
 void Delete(){
+    // Free the memory from the array
     free(createdVector);
+    // Reset the pointer
     createdVector = NULL;
+    // Reset member variables
     _max = 0;
     _size = 0;
 }
@@ -73,9 +92,13 @@ void Delete(){
     @author Jarod Manness
 */
 int Pop(){
-    int ret = createdVector[_size];
-    createdVector[_size - 1] = 0;
+    // Get the last entry in the array
+    int ret = createdVector[_size - 1];
+    // Set that entry back to zero
+    createdVector[_size] = 0;
+    // Decrement the actual size value
     _size--;
+    // Return the value
     return ret;
 }
 
@@ -135,12 +158,15 @@ bool Find(int value){
     @params {position} the position to place the value
 */
 void Insert(int value, int position){
+    // Check if the array needs to be resized
     if(_size >= (_max - 1)){
         Resize(_max * 2);
     }
+    // Shift all elements past the input position forward
     for(int i = _size - 1; i >= position; i--){
         createdVector[i] = createdVector[i - 1];
     }
+    // Set the array at position to the given value
     createdVector[position] = value;
 }
 
@@ -194,6 +220,12 @@ void main(){
     }
     Reverse();
     printf("Reversed:\n");
+    for(int i = 0; i < _size; i++){
+        printf("%d \n", createdVector[i]);
+    }
+    printf("Popped\n");
+    int tmp = Pop();
+    printf("%d\n", tmp);
     for(int i = 0; i < _size; i++){
         printf("%d \n", createdVector[i]);
     }
