@@ -144,6 +144,24 @@ void Insert(int value, int position){
     createdVector[position] = value;
 }
 
+/*
+    @desc this function reverses the array
+    @author Jarod Manness
+*/
+void Reverse() {
+    int* newArray;
+    newArray = (int *)malloc(_max * sizeof(int));
+    int j = 0;
+    for(int i = _size - 1; i >= 0; i--){
+        newArray[j] = createdVector[i];
+        j++;
+    }
+    free(createdVector);
+
+    createdVector = newArray;
+    newArray = NULL;
+}
+
 void main(){
     createdVector = CreateVector(3);
     Append(2);
@@ -171,6 +189,11 @@ void main(){
         printf("Not Found\n");
     }
     Insert(84, 2);
+    for(int i = 0; i < _size; i++){
+        printf("%d \n", createdVector[i]);
+    }
+    Reverse();
+    printf("Reversed:\n");
     for(int i = 0; i < _size; i++){
         printf("%d \n", createdVector[i]);
     }
